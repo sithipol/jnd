@@ -17,13 +17,13 @@ services:
             - web_network
     #Laravel App
     app:
-        # command: bash -c "
-        #     if ! [ -f '.env' ]; then cp .env.example .env; fi &&
-        #     chmod -R 777 storage &&
-        #     if ! [ -d 'vendor' ]; then composer install --no-ansi --no-interaction --no-progress --optimize-autoloader --prefer-dist; fi &&
-        #     if ! grep -Fq "APP_KEY=base64:" .env ; then php artisan key:generate; fi &&
-        #     php artisan storage:link &&
-        #     php artisan migrate && php artisan db:seed"
+        command:
+            sh -c "mkdir mysql && if ! [ -f '.env' ]; then cp .env.example .env; fi &&
+            chmod -R 777 storage &&
+            if ! [ -d 'vendor' ]; then composer install --no-ansi --no-interaction --no-progress --optimize-autoloader --prefer-dist; fi &&
+            if ! grep -Fq "APP_KEY=base64:" .env ; then php artisan key:generate; fi &&
+            php artisan storage:link &&
+            php artisan migrate && php artisan db:seed"
         build:
             args:
                 user: tor
@@ -33,7 +33,7 @@ services:
         # image: laravel_for_work
         image: jnd-app
         container_name: jnd_app
-        restart: always
+        # restart: always
         volumes:
             - ./:/var/www/
         working_dir: /var/www/
